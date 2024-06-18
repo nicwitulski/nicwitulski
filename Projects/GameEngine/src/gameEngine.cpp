@@ -1,11 +1,3 @@
-//============================================================================
-// Name        : GameEngine.cpp
-// Author      : Nicholas Witulski
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-
 #include <unistd.h>
 #include <cstdlib>
 #include <cstring>
@@ -24,12 +16,11 @@ void openCurseWindow(Frame frame)
    keypad(stdscr, TRUE);
    timeout(250);
 
-   char input = '+';
-   while (input != KEY_DL)
+   char input;
+   while (input != '`')
    {
       std::string contentString = frame.getContentString();
-      mvprintw(0, 0, "%s", contentString);
-
+      mvprintw(0, 0, "%s", contentString.c_str());
       input = getch();
       if (input != ERR)
       {
