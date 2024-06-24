@@ -5,8 +5,10 @@
 #include <sstream>
 #include <string>
 
-#include "Frame.h"
 #include "ncurses.h"
+#include "Models/MapModel.h"
+#include "Models/PlayerModel.h"
+#include "Models/WallModel.h"
 
 void openCurseWindow(Frame frame)
 {
@@ -33,7 +35,12 @@ void openCurseWindow(Frame frame)
 
 int main()
 {
-   Frame frame;
+   int         length = 80;
+   int         height = 24;
+   MapModel    mainMap(length, height, "Main Map");
+   PlayerModel player(PositionModel(length / 2 - 1, height / 2 - 1));
+
+   mainMap.addEntity(player);
 
    openCurseWindow(frame);
 
