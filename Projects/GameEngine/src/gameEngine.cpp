@@ -8,9 +8,9 @@
 #include "ncurses.h"
 #include "Models/MapModel.h"
 #include "Models/PlayerModel.h"
-#include "Models/WallModel.h"
+#include "Models/TileModel.h"
 
-void openCurseWindow(Frame frame)
+void openCurseWindow(MapModel mainMap, PlayerModel player)
 {
    initscr();
    raw();
@@ -21,12 +21,12 @@ void openCurseWindow(Frame frame)
    char input;
    while (input != '`')
    {
-      std::string contentString = frame.getContentString();
+      std::string contentString = mainMap.PrintableModel::getContentString();
       mvprintw(0, 0, "%s", contentString.c_str());
       input = getch();
       if (input != ERR)
       {
-         frame.setContentChar((frame.getMaxX() / 2) - 1, (frame.getMaxY() / 2) - 1, input);
+         player.setUserInput(input);
       }
       refresh();
    }
@@ -42,7 +42,7 @@ int main()
 
    mainMap.addEntity(player);
 
-   openCurseWindow(frame);
+   openCurseWindow(mainMap, player);
 
    return 0;
 }

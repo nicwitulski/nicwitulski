@@ -8,28 +8,24 @@ char m_userInput;
 // public -----------------------------------------------------------------------------
 void PlayerModel::playerMovement()
 {
-   PositionModel position = this->PrintableModel::getPosition();
+   SpriteModel sprite = this->PrintableModel::getSprite();
 
    switch (m_userInput)
    {
       case MOVE_UP:
-         position.setLocation(position.getX(), position.getY() + 1);
-         this->PrintableModel::setPosition(position);
+         sprite.moveUp();
          break;
 
       case MOVE_DOWN:
-         position.setLocation(position.getX(), position.getY() - 1);
-         this->PrintableModel::setPosition(position);
+         sprite.moveDown();
          break;
 
       case MOVE_RIGHT:
-         position.setLocation(position.getX() + 1, position.getY());
-         this->PrintableModel::setPosition(position);
+         sprite.moveRight();
          break;
 
       case MOVE_LEFT:
-         position.setLocation(position.getX() - 1, position.getY());
-         this->PrintableModel::setPosition(position);
+         sprite.moveLeft();
          break;
 
       default:
@@ -40,17 +36,20 @@ void PlayerModel::playerMovement()
 PlayerModel::PlayerModel()
 {
    m_userInput = blank;
+   this->PrintableModel::setAlias("player");
+   this->PrintableModel::setSprite(SpriteModel());
    this->setMoveable(true);
    this->setMovementLogic(playerMovement);
 };
 
 // public -----------------------------------------------------------------------------
-PlayerModel::PlayerModel(PositionModel position)
+PlayerModel::PlayerModel(PositionModel position, SpriteModel sprite, std::string alias)
 {
    m_userInput = blank;
+   this->PrintableModel::setAlias(alias);
+   this->PrintableModel::setSprite(sprite);
    this->setMoveable(true);
    this->setMovementLogic(playerMovement);
-   this->PrintableModel::setPosition(position);
 };
 
 // public -----------------------------------------------------------------------------

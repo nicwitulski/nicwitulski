@@ -1,30 +1,40 @@
-#include "WallModel.h"
+#include "TileModel.h"
 
 bool m_visible;
 bool m_solid;
 
 // public -----------------------------------------------------------------------------
-WallModel::WallModel()
+TileModel::TileModel()
 {
    m_visible = true;
    m_solid   = true;
-   this->setAlias("wall");
+   this->setAlias("tile");
+   this->setSprite(SpriteModel());
 };
 
 // public -----------------------------------------------------------------------------
-void WallModel::setVisible(bool visible)
+TileModel::TileModel(bool isVisible, bool isSolid, std::string alias, SpriteModel sprite)
+{
+   m_visible = isVisible;
+   m_solid   = isSolid;
+   this->setAlias(alias);
+   this->setSprite(sprite);
+};
+
+// public -----------------------------------------------------------------------------
+void TileModel::setVisible(bool visible)
 {
    m_visible = visible;
 };
 
 // public -----------------------------------------------------------------------------
-void WallModel::setSolid(bool solid)
+void TileModel::setSolid(bool solid)
 {
    m_solid = solid;
 };
 
 // public -----------------------------------------------------------------------------
-bool WallModel::isSolid()
+bool TileModel::isSolid()
 {
    if (m_solid)
    {
@@ -34,7 +44,7 @@ bool WallModel::isSolid()
 };
 
 // public -----------------------------------------------------------------------------
-bool WallModel::isVisible()
+bool TileModel::isVisible()
 {
    if (m_visible)
    {

@@ -26,8 +26,10 @@ public:
    /// @fn PlayerModel
    ///
    /// @param position
+   /// @param sprite
+   /// @param alias
    ///////////////////////////////////////////////////////////////////
-   PlayerModel(PositionModel position);
+   PlayerModel(PositionModel position, SpriteModel sprite, std::string alias);
 
    ///////////////////////////////////////////////////////////////////
    /// @fn setUserInput

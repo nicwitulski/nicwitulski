@@ -1,62 +1,51 @@
 #include "MapModel.h"
 
-std::vector<WallModel>   m_allWalls;
+#define DEFAULT_LENGTH 80
+#define DEFAULT_HEIGHT 24
+
+std::vector<TileModel>   m_allTiles;
 std::vector<EntityModel> m_allEntities;
 
 // public -----------------------------------------------------------------------------
 MapModel::MapModel()
 {
    this->setAlias("map");
-   this->setDimensions(80, 24, '\u25A6');
-
-   std::vector<std::vector<char>> contents;
-   for (int i = 0; i < 24; i++)
+   SpriteModel sprite = SpriteModel();
+   for (int i = 0; i < DEFAULT_HEIGHT; i++)
    {
-      std::vector<char> tempVector;
-
-      for (int j = 0; j < 80; j++)
+      for (int j = 0; j < DEFAULT_LENGTH; j++)
       {
-         tempVector.push_back('\u25A6');
+         PixelModel pixel(PositionModel(i, j), '+');
+         sprite.addPixel(pixel);
       }
-      contents.push_back(tempVector);
    }
-   this->setContents(contents);
+   this->setSprite(sprite);
 };
 
 // public -----------------------------------------------------------------------------
-MapModel::MapModel(int length, int height, std::string alias)
+MapModel::MapModel(SpriteModel sprite, std::string alias)
 {
-   this->setDimensions(length, height, '\u25A6');
+   this->setSprite(sprite);
    this->setAlias(alias);
-
-   std::vector<std::vector<char>> contents;
-   for (int i = 0; i < 24; i++)
-   {
-      std::vector<char> tempVector;
-
-      for (int j = 0; j < 80; j++)
-      {
-         tempVector.push_back('\u25A6');
-      }
-      contents.push_back(tempVector);
-   }
-   this->setContents(contents);
 };
+// private ----------------------------------------------------------------------------
+void MapModel::UpdateContents() {}
 
 // public -----------------------------------------------------------------------------
-WallModel MapModel::getWallAtPosition(PositionModel position)
+TileModel MapModel::getTileAtPosition(PositionModel position)
 {
-   for (int i = 0; i < m_allWalls.size(); i++)
+   for (int i = 0; i < m_allTiles.size(); i++)
    {
-      WallModel wall = m_allWalls.at(i);
-      if (wall.PrintableModel::getPosition() == position)
+      TileModel tile = m_allTiles.at(i);
+      for (int j = 0; j < tile.PrintableModel::getSprite().getSpriteSize(); j++)
       {
-         return wall;
+         if (position == tile.PrintableModel::getSprite().getPixels().at(j).getPosition())
+         {
+            return tile;
+         }
       }
    }
-   WallModel nullWall;
-   nullWall.PrintableModel::setAlias("null");
-   return nullWall;
+   return NULL;
 };
 
 // public -----------------------------------------------------------------------------
@@ -65,30 +54,29 @@ EntityModel MapModel::getEntityAtPosition(PositionModel position)
    for (int i = 0; i < m_allEntities.size(); i++)
    {
       EntityModel entity = m_allEntities.at(i);
-      if (entity.PrintableModel::getPosition() == position)
+      for (int j = 0; j < entity.PrintableModel::getSprite().getSpriteSize(); j++)
       {
-         return entity;
+         if (position == entity.PrintableModel::getSprite().getPixels().at(j).getPosition())
+         {
+            return entity;
+         }
       }
    }
-   EntityModel nullEntity;
-   nullEntity.PrintableModel::setAlias("null");
-   return nullEntity;
+   return NULL;
 };
 
 // public -----------------------------------------------------------------------------
-WallModel MapModel::getWallWithAlias(std::string alias)
+TileModel MapModel::getTileWithAlias(std::string alias)
 {
-   for (int i = 0; i < m_allWalls.size(); i++)
+   for (int i = 0; i < m_allTiles.size(); i++)
    {
-      WallModel wall = m_allWalls.at(i);
-      if (wall.PrintableModel::getAlias() == alias)
+      TileModel tile = m_allTiles.at(i);
+      if (alias == tile.PrintableModel::getAlias())
       {
-         return wall;
+         return tile;
       }
    }
-   WallModel nullWall;
-   nullWall.PrintableModel::setAlias("null");
-   return nullWall;
+   return NULL;
 };
 
 // public -----------------------------------------------------------------------------
@@ -97,20 +85,18 @@ EntityModel MapModel::getEntityWithAlias(std::string alias)
    for (int i = 0; i < m_allEntities.size(); i++)
    {
       EntityModel entity = m_allEntities.at(i);
-      if (entity.PrintableModel::getAlias() == alias)
+      if (alias == entity.PrintableModel::getAlias())
       {
          return entity;
       }
    }
-   EntityModel nullEntity;
-   nullEntity.PrintableModel::setAlias("null");
-   return nullEntity;
+   return NULL;
 };
 
 // public -----------------------------------------------------------------------------
-void MapModel::addWall(WallModel wall)
+void MapModel::addTile(TileModel tile)
 {
-   m_allWalls.push_back(wall);
+   m_allTiles.push_back(tile);
 };
 
 // public -----------------------------------------------------------------------------

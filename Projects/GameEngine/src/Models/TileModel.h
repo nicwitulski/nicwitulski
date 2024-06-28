@@ -1,5 +1,5 @@
-#ifndef WALL_H
-#define WALL_H
+#ifndef TILE_H
+#define TILE_H
 
 #include "PrintableModel.h"
 
@@ -8,14 +8,24 @@
 ///
 /// Acts as a printable object that can be toggled solid or visible
 ///////////////////////////////////////////////////////////////////
-class WallModel : private PrintableModel
+class TileModel : private PrintableModel
 {
 private:
 public:
    ///////////////////////////////////////////////////////////////////
-   /// @fn WallModel
+   /// @fn TileModel
    ///////////////////////////////////////////////////////////////////
-   WallModel();
+   TileModel();
+
+   ///////////////////////////////////////////////////////////////////
+   /// @fn TileModel
+   ///
+   /// @param isVisible
+   /// @param isSolid
+   /// @param alias
+   /// @param sprite
+   ///////////////////////////////////////////////////////////////////
+   TileModel(bool isVisible, bool isSolid, std::string alias, SpriteModel sprite);
 
    ///////////////////////////////////////////////////////////////////
    /// @fn setVisible
