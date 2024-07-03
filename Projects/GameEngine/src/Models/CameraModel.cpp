@@ -3,12 +3,6 @@
 #define DEFAULT_LENGTH 80
 #define DEFAULT_HEIGHT 24
 
-PositionModel m_middlePosition;
-int           m_length;
-int           m_height;
-bool          m_lockedOntoPlayer;
-PlayerModel   m_player;
-
 CameraModel::CameraModel()
 {
    m_lockedOntoPlayer = true;
@@ -24,7 +18,7 @@ CameraModel::CameraModel(int length, int height, PositionModel middlePosition, b
    m_height           = height;
    m_lockedOntoPlayer = isLockedOntoPlayer;
    m_player           = player;
-   if (m_lockedOntoPlayer && m_player != NULL)
+   if (m_lockedOntoPlayer)
    {
       setMiddlePosition();
    }

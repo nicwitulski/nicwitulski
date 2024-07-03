@@ -1,8 +1,5 @@
 #include "TileModel.h"
 
-bool m_visible;
-bool m_solid;
-
 // public -----------------------------------------------------------------------------
 TileModel::TileModel()
 {

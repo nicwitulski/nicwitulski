@@ -1,8 +1,5 @@
 #include "PositionModel.h"
 
-int m_x;
-int m_y;
-
 // public -----------------------------------------------------------------------------
 PositionModel::PositionModel()
 {
@@ -35,3 +32,20 @@ int PositionModel::getY()
 {
    return m_y;
 };
+
+// public -----------------------------------------------------------------------------
+int PositionModel::Compare(PositionModel position) const
+{
+   if ((position.getY() > m_y) || (position.getY() == m_y && position.getX() > m_x))
+   {
+      return 1;
+   }
+   else if (position.getY() == m_y && position.getX() == m_x)
+   {
+      return 0;
+   }
+   else
+   {
+      return -1;
+   }
+}

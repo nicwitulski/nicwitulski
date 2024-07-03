@@ -1,8 +1,5 @@
 #include "PixelModel.h"
 
-PositionModel m_position;
-char          m_character;
-
 // public -----------------------------------------------------------------------------
 PixelModel::PixelModel()
 {
@@ -39,4 +36,14 @@ PositionModel PixelModel::getPosition()
 char PixelModel::getCharacter()
 {
    return m_character;
+}
+
+// public -----------------------------------------------------------------------------
+int PixelModel::Compare(PixelModel pixel) const
+{
+   if (pixel.getPosition() == m_position && pixel.getCharacter() == m_character)
+   {
+      return 0;
+   }
+   return -1;
 }

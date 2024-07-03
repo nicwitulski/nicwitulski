@@ -8,9 +8,12 @@
 ///
 /// Acts as a printable object that can be toggled solid or visible
 ///////////////////////////////////////////////////////////////////
-class TileModel : private PrintableModel
+class TileModel : public PrintableModel
 {
 private:
+   bool m_visible;
+   bool m_solid;
+
 public:
    ///////////////////////////////////////////////////////////////////
    /// @fn TileModel

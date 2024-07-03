@@ -1,27 +1,36 @@
 #include "SpriteModel.h"
 
-std::vector<PixelModel> m_pixels;
-int                     m_spriteSize;
-PositionModel           m_maxPosition;
-PixelModel              m_middlePixel;
-
 // public -----------------------------------------------------------------------------
 SpriteModel::SpriteModel()
 {
    std::vector<PixelModel> pixelVector;
-   m_pixels      = pixelVector.push_back(PixelModel());
-   m_spriteSize  = 1;
-   m_maxPosition = m_pixels.at(0).getPosition();
+   PixelModel              pixel;
+   pixelVector.push_back(pixel);
+   m_pixels          = pixelVector;
+   m_spriteSize      = 1;
+   m_minimumPosition = m_pixels.at(0).getPosition();
+   m_maxPosition     = m_pixels.at(0).getPosition();
    setMiddlePixel();
 };
 
 // public -----------------------------------------------------------------------------
 SpriteModel::SpriteModel(std::vector<PixelModel> pixels)
 {
+   m_pixels          = pixels;
+   m_spriteSize      = m_pixels.size();
+   m_maxPosition     = m_pixels.at(0).getPosition();
+   m_minimumPosition = m_pixels.at(0).getPosition();
+   setMinimumPosition();
+   setMaxPosition();
+   setMiddlePixel();
+};
+
+// public -----------------------------------------------------------------------------
+SpriteModel::SpriteModel(std::vector<PixelModel> pixels, PositionModel maxPosition)
+{
    m_pixels      = pixels;
    m_spriteSize  = m_pixels.size();
-   m_maxPosition = m_pixels.at(0).getPosition();
-   setMaxPosition();
+   m_maxPosition = maxPosition;
    setMiddlePixel();
 };
 
@@ -41,6 +50,12 @@ int SpriteModel::getSpriteSize()
 PositionModel SpriteModel::getMaxPosition()
 {
    return m_maxPosition;
+};
+
+// public -----------------------------------------------------------------------------
+PositionModel SpriteModel::getMinimumPosition()
+{
+   return m_minimumPosition;
 };
 
 PixelModel SpriteModel::getMiddlePixel()
@@ -73,8 +88,34 @@ PixelModel SpriteModel::getPixelAtPosition(PositionModel position)
          return pixel;
       }
    }
-   return PixelModel(PositionModel(), NULL);
+   PositionModel errorPosition(0, 0);
+   PixelModel    errorPixel(errorPosition, '~');
+   return errorPixel;
 }
+
+// public -----------------------------------------------------------------------------
+std::string SpriteModel::getString()
+{
+   std::string result = "";
+   for (int y = m_minimumPosition.getY(); y <= m_maxPosition.getY(); y++)
+   {
+      for (int x = m_minimumPosition.getX(); x <= m_maxPosition.getX(); x++)
+      {
+         PositionModel position(x, y);
+         PixelModel    pixel = getPixelAtPosition(position);
+         if (pixel.getCharacter() != '~')
+         {
+            result.push_back(pixel.getCharacter());
+         }
+         else
+         {
+            result.push_back(' ');
+         }
+      }
+      result.push_back('\n');
+   }
+   return result;
+};
 
 // private ----------------------------------------------------------------------------
 void SpriteModel::setMaxPosition(PositionModel candidate)
@@ -86,6 +127,19 @@ void SpriteModel::setMaxPosition(PositionModel candidate)
    if (candidate.getY() > m_maxPosition.getY())
    {
       m_maxPosition.setLocation(m_maxPosition.getX(), candidate.getX());
+   }
+};
+
+// private ----------------------------------------------------------------------------
+void SpriteModel::setMinimumPosition(PositionModel candidate)
+{
+   if (candidate.getX() < m_minimumPosition.getX())
+   {
+      m_minimumPosition.setLocation(candidate.getX(), m_minimumPosition.getY());
+   }
+   if (candidate.getY() < m_minimumPosition.getY())
+   {
+      m_minimumPosition.setLocation(m_minimumPosition.getX(), candidate.getX());
    }
 };
 
@@ -108,6 +162,24 @@ void SpriteModel::setMaxPosition()
 };
 
 // private ----------------------------------------------------------------------------
+void SpriteModel::setMinimumPosition()
+{
+   for (int i = 1; i < m_spriteSize; i++)
+   {
+      PositionModel candidate = m_pixels.at(i).getPosition();
+
+      if (candidate.getX() < m_minimumPosition.getX())
+      {
+         m_minimumPosition.setLocation(candidate.getX(), m_minimumPosition.getY());
+      }
+      if (candidate.getY() < m_minimumPosition.getY())
+      {
+         m_minimumPosition.setLocation(m_minimumPosition.getX(), candidate.getX());
+      }
+   }
+};
+
+// private ----------------------------------------------------------------------------
 void SpriteModel::setMiddlePixel()
 {
    PositionModel middlePosition = PositionModel(m_maxPosition.getX() / 2, m_maxPosition.getY() / 2);
@@ -116,51 +188,19 @@ void SpriteModel::setMiddlePixel()
 }
 
 // public -----------------------------------------------------------------------------
-void SpriteModel::editSprite(std::vector<PixelModel> pixels, bool overwrite)
-{
-   int previousSize = m_spriteSize;
-   for (int i = 0; i < previousSize; i++)
-   {
-      bool       samePosition = false;
-      int        samePositionIndex;
-      PixelModel newPixel = pixels.at(i);
-      for (int j = 0; j < pixels.size(); j++)
-      {
-         PixelModel oldPixel = m_pixels.at(j);
-         if (newPixel.getPosition() == oldPixel.getPosition())
-         {
-            samePositionIndex = j;
-            samePosition      = true;
-            break;
-         }
-      }
-      if (samePosition)
-      {
-         if (overwrite)
-         {
-            m_pixels.at(samePositionIndex) = newPixel;
-         }
-      }
-      else
-      {
-         addPixel(newPixel);
-      }
-   }
-   setMiddlePixel();
-};
-
-// public -----------------------------------------------------------------------------
 void SpriteModel::resetSprite()
 {
    std::vector<PixelModel> pixelVector;
-   m_pixels      = pixelVector.push_back(PixelModel());
+   PixelModel              pixel;
+   pixelVector.push_back(pixel);
+   m_pixels      = pixelVector;
    m_spriteSize  = 1;
    m_maxPosition = m_pixels.at(0).getPosition();
    setMiddlePixel();
 };
 
 // public -----------------------------------------------------------------------------
-void SpriteModel::setPixelAtPosition(PositionModel position, char character)
+void SpriteModel::setCharacterAtPosition(PositionModel position, char character)
 {
    int pixelIndex = getPixelIndexAtPosition(position);
    if (pixelIndex == -1)
@@ -173,10 +213,36 @@ void SpriteModel::setPixelAtPosition(PositionModel position, char character)
 // public -----------------------------------------------------------------------------
 void SpriteModel::addPixel(PixelModel pixel)
 {
+   for (int i = 0; i < m_spriteSize; i++)
+   {
+      if (pixel.getPosition() == m_pixels.at(i).getPosition())
+      {
+         return;
+      }
+   }
    m_pixels.push_back(pixel);
    m_spriteSize++;
    setMaxPosition(pixel.getPosition());
 }
+
+// public -----------------------------------------------------------------------------
+void SpriteModel::moveWholeSpriteToMiddlePosition(PositionModel middle)
+{
+   int xDiff = middle.getX() - m_middlePixel.getPosition().getX();
+   int yDiff = middle.getY() - m_middlePixel.getPosition().getY();
+
+   for (int i = 0; i < m_spriteSize; i++)
+   {
+      PixelModel    pixel = m_pixels.at(i);
+      PositionModel newPosition;
+      newPosition.setLocation(xDiff + pixel.getPosition().getX(), yDiff + pixel.getPosition().getY());
+      pixel.setPosition(newPosition);
+      m_pixels.at(i) = pixel;
+      setMinimumPosition(pixel.getPosition());
+      setMaxPosition(pixel.getPosition());
+      setMiddlePixel();
+   }
+};
 
 // public -----------------------------------------------------------------------------
 void SpriteModel::moveUp()
@@ -185,9 +251,11 @@ void SpriteModel::moveUp()
    {
       PixelModel pixel = m_pixels.at(i);
       pixel.setPosition(PositionModel(pixel.getPosition().getX(), pixel.getPosition().getY() + 1));
+      m_pixels.at(i) = pixel;
+      setMinimumPosition(pixel.getPosition());
+      setMaxPosition(pixel.getPosition());
+      setMiddlePixel();
    }
-   m_middlePixel = m_middlePixel.setPosition(
-         PositionModel(m_middlePixel.getPosition().getX(), m_middlePixel.getPosition().getY() + 1));
 };
 
 // public -----------------------------------------------------------------------------
@@ -197,9 +265,11 @@ void SpriteModel::moveDown()
    {
       PixelModel pixel = m_pixels.at(i);
       pixel.setPosition(PositionModel(pixel.getPosition().getX(), pixel.getPosition().getY() - 1));
+      m_pixels.at(i) = pixel;
+      setMinimumPosition(pixel.getPosition());
+      setMaxPosition(pixel.getPosition());
+      setMiddlePixel();
    }
-   m_middlePixel = m_middlePixel.setPosition(
-         PositionModel(m_middlePixel.getPosition().getX(), m_middlePixel.getPosition().getY() - 1));
 };
 
 // public -----------------------------------------------------------------------------
@@ -209,9 +279,11 @@ void SpriteModel::moveLeft()
    {
       PixelModel pixel = m_pixels.at(i);
       pixel.setPosition(PositionModel(pixel.getPosition().getX() - 1, pixel.getPosition().getY()));
+      m_pixels.at(i) = pixel;
+      setMinimumPosition(pixel.getPosition());
+      setMaxPosition(pixel.getPosition());
+      setMiddlePixel();
    }
-   m_middlePixel = m_middlePixel.setPosition(
-         PositionModel(m_middlePixel.getPosition().getX() - 1, m_middlePixel.getPosition().getY()));
 };
 
 // public -----------------------------------------------------------------------------
@@ -221,7 +293,26 @@ void SpriteModel::moveRight()
    {
       PixelModel pixel = m_pixels.at(i);
       pixel.setPosition(PositionModel(pixel.getPosition().getX() + 1, pixel.getPosition().getY()));
+      m_pixels.at(i) = pixel;
+      setMinimumPosition(pixel.getPosition());
+      setMaxPosition(pixel.getPosition());
+      setMiddlePixel();
    }
-   m_middlePixel = m_middlePixel.setPosition(
-         PositionModel(m_middlePixel.getPosition().getX() + 1, m_middlePixel.getPosition().getY()));
 };
+
+// public -----------------------------------------------------------------------------
+int SpriteModel::Compare(SpriteModel sprite) const
+{
+   if (sprite.getSpriteSize() == m_spriteSize && sprite.getMaxPosition() == m_maxPosition)
+   {
+      for (int i = 0; i < m_spriteSize; i++)
+      {
+         if (sprite.getPixels().at(i) != m_pixels.at(i))
+         {
+            return -1;
+         }
+      }
+      return 0;
+   }
+   return -1;
+}

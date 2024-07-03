@@ -28,24 +28,21 @@ MapModel::MapModel(SpriteModel sprite, std::string alias)
    this->setSprite(sprite);
    this->setAlias(alias);
 };
-// private ----------------------------------------------------------------------------
-void MapModel::UpdateContents() {}
-
 // public -----------------------------------------------------------------------------
 TileModel MapModel::getTileAtPosition(PositionModel position)
 {
    for (int i = 0; i < m_allTiles.size(); i++)
    {
       TileModel tile = m_allTiles.at(i);
-      for (int j = 0; j < tile.PrintableModel::getSprite().getSpriteSize(); j++)
+      for (int j = 0; j < tile.getSprite().getSpriteSize(); j++)
       {
-         if (position == tile.PrintableModel::getSprite().getPixels().at(j).getPosition())
+         if (position == tile.getSprite().getPixels().at(j).getPosition())
          {
             return tile;
          }
       }
    }
-   return NULL;
+   return TileModel(false, false, "null", SpriteModel());
 };
 
 // public -----------------------------------------------------------------------------
@@ -54,15 +51,15 @@ EntityModel MapModel::getEntityAtPosition(PositionModel position)
    for (int i = 0; i < m_allEntities.size(); i++)
    {
       EntityModel entity = m_allEntities.at(i);
-      for (int j = 0; j < entity.PrintableModel::getSprite().getSpriteSize(); j++)
+      for (int j = 0; j < entity.getSprite().getSpriteSize(); j++)
       {
-         if (position == entity.PrintableModel::getSprite().getPixels().at(j).getPosition())
+         if (position == entity.getSprite().getPixels().at(j).getPosition())
          {
             return entity;
          }
       }
    }
-   return NULL;
+   return EntityModel(SpriteModel(), "null", false);
 };
 
 // public -----------------------------------------------------------------------------
@@ -76,7 +73,7 @@ TileModel MapModel::getTileWithAlias(std::string alias)
          return tile;
       }
    }
-   return NULL;
+   return TileModel(false, false, "null", SpriteModel());
 };
 
 // public -----------------------------------------------------------------------------
@@ -90,7 +87,7 @@ EntityModel MapModel::getEntityWithAlias(std::string alias)
          return entity;
       }
    }
-   return NULL;
+   return EntityModel(SpriteModel(), "null", false);
 };
 
 // public -----------------------------------------------------------------------------

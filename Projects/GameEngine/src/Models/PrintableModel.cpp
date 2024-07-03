@@ -1,8 +1,5 @@
 #include "PrintableModel.h"
 
-std::string m_alias;
-SpriteModel m_sprite;
-
 // public -----------------------------------------------------------------------------
 PrintableModel::PrintableModel(void)
 {
@@ -30,32 +27,23 @@ SpriteModel PrintableModel::getSprite()
 }
 
 // public -----------------------------------------------------------------------------
-std::string PrintableModel::getSpriteString()
+void PrintableModel::setAlias(std::string alias)
 {
-   std::string result;
+   m_alias = alias;
+}
 
-   for (int i = 0; i < m_sprite.getMaxPosition().getX(); i++)
-   {
-      for (int j = 0; j < m_sprite.getMaxPosition().getY(); j++)
-      {
-         PositionModel position(i, j);
-         PixelModel    pixel = m_sprite.getPixelAtPosition(position);
-         if (pixel.getCharacter() == NULL)
-         {
-            result.push_back(' ');
-         }
-         else
-         {
-            result.push_back(pixel.getCharacter());
-         }
-      }
-      result.push_back('\n');
-   }
-
-   return result;
-};
 // public -----------------------------------------------------------------------------
 void PrintableModel::setSprite(SpriteModel sprite)
 {
    m_sprite = sprite;
+};
+
+// public -----------------------------------------------------------------------------
+int PrintableModel::Compare(PrintableModel printable) const
+{
+   if (printable.getSprite() == m_sprite && printable.getAlias() == m_alias)
+   {
+      return 0;
+   }
+   return -1;
 }

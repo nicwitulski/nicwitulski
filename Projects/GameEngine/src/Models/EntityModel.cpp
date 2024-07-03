@@ -1,16 +1,15 @@
 #include "EntityModel.h"
 
-bool m_isMovable;
-void (*m_movementFunction)();
-
-// private ----------------------------------------------------------------------------
-void EntityModel::immovable(){};
+void immovable()
+{
+   return;
+}
 
 // public -----------------------------------------------------------------------------
 EntityModel::EntityModel()
 {
-   m_isMovable         = false;
-   *m_movementFunction = immovable;
+   m_isMovable        = false;
+   m_movementFunction = immovable;
    this->setSprite(SpriteModel());
    this->setAlias("entity");
 };
@@ -20,7 +19,8 @@ EntityModel::EntityModel(SpriteModel sprite, std::string alias, bool isMovable)
 {
    this->setAlias(alias);
    this->setSprite(sprite);
-   m_isMovable = false;
+   m_isMovable        = isMovable;
+   m_movementFunction = immovable;
 };
 
 // public -----------------------------------------------------------------------------
@@ -30,10 +30,19 @@ bool EntityModel::isMovable()
 };
 
 // public -----------------------------------------------------------------------------
-void EntityModel::setMovementLogic(void (*movementFunction)())
+void EntityModel::setMovementLogic(void (*movementFunction)(SpriteModel sprite))
 {
-   *m_movementFunction = *movementFunction;
+   m_movementFunction = movementFunction;
 };
+
+// public -----------------------------------------------------------------------------
+void EntityModel::doMovement()
+{
+   if (m_isMovable)
+   {
+      m_movementFunction(this->getSprite());
+   }
+}
 
 // public -----------------------------------------------------------------------------
 void EntityModel::setMoveable(bool isMovable)

@@ -9,6 +9,9 @@
 class PositionModel
 {
 private:
+   int m_x;
+   int m_y;
+
 public:
    ///////////////////////////////////////////////////////////////////
    /// @fn PositionModel
@@ -40,6 +43,15 @@ public:
    /// @fn getY
    ///////////////////////////////////////////////////////////////////
    int getY();
+
+   ///////////////////////////////////////////////////////////////////
+   /// @fn Compare Functions
+   ///////////////////////////////////////////////////////////////////
+   int Compare(PositionModel position) const;
+
+   bool operator==(PositionModel position) const { return 0 == Compare(position); }
+   bool operator>(PositionModel position) const { return Compare(position) > 0; }
+   bool operator<(PositionModel position) const { return Compare(position) < 0; }
 };
 
 #endif

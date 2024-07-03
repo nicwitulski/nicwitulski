@@ -3,32 +3,24 @@
 
 #define blank 32
 
-char m_userInput;
-
-// public -----------------------------------------------------------------------------
-void PlayerModel::playerMovement()
+// static public ----------------------------------------------------------------------
+void playerMovement(SpriteModel sprite)
 {
-   SpriteModel sprite = this->PrintableModel::getSprite();
-
-   switch (m_userInput)
+   if (m_userInput == MOVE_UP)
    {
-      case MOVE_UP:
-         sprite.moveUp();
-         break;
-
-      case MOVE_DOWN:
-         sprite.moveDown();
-         break;
-
-      case MOVE_RIGHT:
-         sprite.moveRight();
-         break;
-
-      case MOVE_LEFT:
-         sprite.moveLeft();
-         break;
-
-      default:
+      sprite.moveUp();
+   }
+   else if (m_userInput == MOVE_DOWN)
+   {
+      sprite.moveDown();
+   }
+   else if (m_userInput == MOVE_RIGHT)
+   {
+      sprite.moveRight();
+   }
+   else if (m_userInput == MOVE_LEFT)
+   {
+      sprite.moveLeft();
    }
 };
 
@@ -36,20 +28,21 @@ void PlayerModel::playerMovement()
 PlayerModel::PlayerModel()
 {
    m_userInput = blank;
-   this->PrintableModel::setAlias("player");
-   this->PrintableModel::setSprite(SpriteModel());
+   this->setAlias("player");
+   this->setSprite(SpriteModel());
    this->setMoveable(true);
-   this->setMovementLogic(playerMovement);
+   this->setMovementLogic(&playerMovement);
 };
 
 // public -----------------------------------------------------------------------------
 PlayerModel::PlayerModel(PositionModel position, SpriteModel sprite, std::string alias)
 {
    m_userInput = blank;
-   this->PrintableModel::setAlias(alias);
-   this->PrintableModel::setSprite(sprite);
+   this->setAlias(alias);
+   this->setSprite(sprite);
+   this->getSprite().moveWholeSpriteToMiddlePosition(position);
    this->setMoveable(true);
-   this->setMovementLogic(playerMovement);
+   this->setMovementLogic(&playerMovement);
 };
 
 // public -----------------------------------------------------------------------------

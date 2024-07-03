@@ -7,6 +7,12 @@
 class CameraModel
 {
 private:
+   PositionModel m_middlePosition;
+   int           m_length;
+   int           m_height;
+   bool          m_lockedOntoPlayer;
+   PlayerModel   m_player;
+
 public:
    CameraModel();
 

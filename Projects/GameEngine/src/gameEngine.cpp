@@ -6,11 +6,12 @@
 #include <string>
 
 #include "ncurses.h"
+#include "Controllers/ReadSpriteFile.h"
 #include "Models/MapModel.h"
 #include "Models/PlayerModel.h"
 #include "Models/TileModel.h"
 
-void openCurseWindow(MapModel mainMap, PlayerModel player)
+/*void openCurseWindow(MapModel mainMap, PlayerModel player)
 {
    initscr();
    raw();
@@ -21,28 +22,45 @@ void openCurseWindow(MapModel mainMap, PlayerModel player)
    char input;
    while (input != '`')
    {
-      std::string contentString = mainMap.PrintableModel::getContentString();
-      mvprintw(0, 0, "%s", contentString.c_str());
+      std::string mapString    = mainMap.getSpriteString();
+      std::string playerString = player.getSpriteString();
+      mvprintw(0, 0, "%s", mapString.c_str());
+
+      PositionModel playerPosition = player.getSprite().getMinimumPosition();
+      mvprintw(playerPosition.getX(), playerPosition.getY(), "%s", playerString.c_str());
       input = getch();
       if (input != ERR)
       {
          player.setUserInput(input);
+         player.doMovement();
       }
       refresh();
    }
    endwin();
-}
+}*/
 
 int main()
 {
-   int         length = 80;
-   int         height = 24;
-   MapModel    mainMap(length, height, "Main Map");
-   PlayerModel player(PositionModel(length / 2 - 1, height / 2 - 1));
+   /*   MapModel      mainMap;
+   PositionModel cornerMapPosition = mainMap.PrintableModel::getSprite().getMaxPosition();
 
-   mainMap.addEntity(player);
+   SpriteModel playerSprite = getSpriteFromFile("Views/Sprites/player.txt");
+   PlayerModel player = PlayerModel(PositionModel(cornerMapPosition.getX() / 2, cornerMapPosition.getY() / 2),
+                                    playerSprite, "player");*/
 
-   openCurseWindow(mainMap, player);
+   std::vector<PixelModel> pixels;
+   pixels.push_back(PixelModel(PositionModel(0, 0), 'H'));
+   pixels.push_back(PixelModel(PositionModel(1, 0), 'i'));
+
+   SpriteModel sprite(pixels);
+
+   std::cout << sprite.getString();
+
+   //std::cout << sprite.getString();
+
+   //mainMap.addEntity(player);
+
+   //openCurseWindow(mainMap, player);
 
    return 0;
 }
