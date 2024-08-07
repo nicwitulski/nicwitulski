@@ -15,6 +15,18 @@ PositionModel::PositionModel(int x, int y)
 };
 
 // public -----------------------------------------------------------------------------
+void PositionModel::setX(int x)
+{
+   m_x = x;
+}
+
+// public -----------------------------------------------------------------------------
+void PositionModel::setY(int y)
+{
+   m_y = y;
+}
+
+// public -----------------------------------------------------------------------------
 void PositionModel::setLocation(int x, int y)
 {
    m_x = x;
@@ -48,4 +60,4 @@ int PositionModel::Compare(PositionModel position) const
    {
       return -1;
    }
-}
+};

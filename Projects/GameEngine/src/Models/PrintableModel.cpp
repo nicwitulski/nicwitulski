@@ -8,7 +8,7 @@ PrintableModel::PrintableModel(void)
 };
 
 // public -----------------------------------------------------------------------------
-PrintableModel::PrintableModel(SpriteModel sprite, std::string alias)
+PrintableModel::PrintableModel(SpriteModel sprite, std::string alias, int layer)
 {
    m_sprite = sprite;
    m_alias  = alias;
@@ -30,13 +30,16 @@ SpriteModel PrintableModel::getSprite()
 void PrintableModel::setAlias(std::string alias)
 {
    m_alias = alias;
-}
+};
 
 // public -----------------------------------------------------------------------------
 void PrintableModel::setSprite(SpriteModel sprite)
 {
    m_sprite = sprite;
 };
+
+// public -----------------------------------------------------------------------------
+void PrintableModel::doMovement(char input) {}
 
 // public -----------------------------------------------------------------------------
 int PrintableModel::Compare(PrintableModel printable) const
@@ -46,4 +49,4 @@ int PrintableModel::Compare(PrintableModel printable) const
       return 0;
    }
    return -1;
-}
+};

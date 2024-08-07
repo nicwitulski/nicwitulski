@@ -5,8 +5,8 @@ TileModel::TileModel()
 {
    m_visible = true;
    m_solid   = true;
-   this->setAlias("tile");
-   this->setSprite(SpriteModel());
+   setSprite(SpriteModel());
+   setAlias("Tile");
 };
 
 // public -----------------------------------------------------------------------------
@@ -14,8 +14,8 @@ TileModel::TileModel(bool isVisible, bool isSolid, std::string alias, SpriteMode
 {
    m_visible = isVisible;
    m_solid   = isSolid;
-   this->setAlias(alias);
-   this->setSprite(sprite);
+   setSprite(sprite);
+   setAlias(alias);
 };
 
 // public -----------------------------------------------------------------------------

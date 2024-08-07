@@ -2,16 +2,17 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 
 #include "ncurses.h"
-#include "Controllers/ReadSpriteFile.h"
+#include "Controllers/SpriteUtilsController.h"
 #include "Models/MapModel.h"
 #include "Models/PlayerModel.h"
 #include "Models/TileModel.h"
 
-/*void openCurseWindow(MapModel mainMap, PlayerModel player)
+void openCurseWindow(std::map<int, PrintableModel> layerPrintableMap)
 {
    initscr();
    raw();
@@ -22,45 +23,34 @@
    char input;
    while (input != '`')
    {
-      std::string mapString    = mainMap.getSpriteString();
-      std::string playerString = player.getSpriteString();
-      mvprintw(0, 0, "%s", mapString.c_str());
+      std::string printablesString = getStringFromPrintables(layerPrintableMap);
 
-      PositionModel playerPosition = player.getSprite().getMinimumPosition();
-      mvprintw(playerPosition.getX(), playerPosition.getY(), "%s", playerString.c_str());
+      mvprintw(0, 0, "%s", printablesString.c_str());
+
       input = getch();
       if (input != ERR)
       {
-         player.setUserInput(input);
-         player.doMovement();
+         layerPrintableMap.at(1).doMovement(input);
       }
       refresh();
    }
    endwin();
-}*/
+}
 
 int main()
 {
-   /*   MapModel      mainMap;
-   PositionModel cornerMapPosition = mainMap.PrintableModel::getSprite().getMaxPosition();
+   PlayerModel player;
+   SpriteModel sprite = getSpriteFromFile("Views/Sprites/player.txt");
+   MapModel    mainMap;
 
-   SpriteModel playerSprite = getSpriteFromFile("Views/Sprites/player.txt");
-   PlayerModel player = PlayerModel(PositionModel(cornerMapPosition.getX() / 2, cornerMapPosition.getY() / 2),
-                                    playerSprite, "player");*/
+   sprite.moveWholeSpriteToMiddlePosition(mainMap.getSprite().getMiddlePixel().getPosition());
+   player.setSprite(sprite);
 
-   std::vector<PixelModel> pixels;
-   pixels.push_back(PixelModel(PositionModel(0, 0), 'H'));
-   pixels.push_back(PixelModel(PositionModel(1, 0), 'i'));
+   std::map<int, PrintableModel> layerPrintableMap;
+   layerPrintableMap[1] = player;
+   layerPrintableMap[0] = mainMap;
 
-   SpriteModel sprite(pixels);
-
-   std::cout << sprite.getString();
-
-   //std::cout << sprite.getString();
-
-   //mainMap.addEntity(player);
-
-   //openCurseWindow(mainMap, player);
+   openCurseWindow(layerPrintableMap);
 
    return 0;
 }

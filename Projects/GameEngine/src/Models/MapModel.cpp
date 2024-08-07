@@ -3,31 +3,46 @@
 #define DEFAULT_LENGTH 80
 #define DEFAULT_HEIGHT 24
 
-std::vector<TileModel>   m_allTiles;
-std::vector<EntityModel> m_allEntities;
-
 // public -----------------------------------------------------------------------------
 MapModel::MapModel()
 {
-   this->setAlias("map");
+   initialize();
+
    SpriteModel sprite = SpriteModel();
-   for (int i = 0; i < DEFAULT_HEIGHT; i++)
+   for (int i = 0; i < DEFAULT_LENGTH; i++)
    {
-      for (int j = 0; j < DEFAULT_LENGTH; j++)
+      for (int j = 0; j < DEFAULT_HEIGHT; j++)
       {
-         PixelModel pixel(PositionModel(i, j), '+');
+         PixelModel pixel = PixelModel(PositionModel(i, j), '+');
          sprite.addPixel(pixel);
       }
    }
-   this->setSprite(sprite);
+   setSprite(sprite);
 };
 
 // public -----------------------------------------------------------------------------
 MapModel::MapModel(SpriteModel sprite, std::string alias)
 {
-   this->setSprite(sprite);
-   this->setAlias(alias);
+   initialize();
+
+   setSprite(sprite);
+   setAlias(alias);
 };
+
+// private ----------------------------------------------------------------------------
+void MapModel::initialize()
+{
+   m_allTiles = std::vector<TileModel>();
+   setSprite(SpriteModel());
+   setAlias("map");
+};
+
+// public -----------------------------------------------------------------------------
+std::vector<TileModel> MapModel::getTiles()
+{
+   return m_allTiles;
+};
+
 // public -----------------------------------------------------------------------------
 TileModel MapModel::getTileAtPosition(PositionModel position)
 {
@@ -46,23 +61,6 @@ TileModel MapModel::getTileAtPosition(PositionModel position)
 };
 
 // public -----------------------------------------------------------------------------
-EntityModel MapModel::getEntityAtPosition(PositionModel position)
-{
-   for (int i = 0; i < m_allEntities.size(); i++)
-   {
-      EntityModel entity = m_allEntities.at(i);
-      for (int j = 0; j < entity.getSprite().getSpriteSize(); j++)
-      {
-         if (position == entity.getSprite().getPixels().at(j).getPosition())
-         {
-            return entity;
-         }
-      }
-   }
-   return EntityModel(SpriteModel(), "null", false);
-};
-
-// public -----------------------------------------------------------------------------
 TileModel MapModel::getTileWithAlias(std::string alias)
 {
    for (int i = 0; i < m_allTiles.size(); i++)
@@ -77,27 +75,7 @@ TileModel MapModel::getTileWithAlias(std::string alias)
 };
 
 // public -----------------------------------------------------------------------------
-EntityModel MapModel::getEntityWithAlias(std::string alias)
-{
-   for (int i = 0; i < m_allEntities.size(); i++)
-   {
-      EntityModel entity = m_allEntities.at(i);
-      if (alias == entity.PrintableModel::getAlias())
-      {
-         return entity;
-      }
-   }
-   return EntityModel(SpriteModel(), "null", false);
-};
-
-// public -----------------------------------------------------------------------------
 void MapModel::addTile(TileModel tile)
 {
    m_allTiles.push_back(tile);
-};
-
-// public -----------------------------------------------------------------------------
-void MapModel::addEntity(EntityModel entity)
-{
-   m_allEntities.push_back(entity);
 };

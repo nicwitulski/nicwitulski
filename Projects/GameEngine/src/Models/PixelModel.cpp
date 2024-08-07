@@ -36,7 +36,7 @@ PositionModel PixelModel::getPosition()
 char PixelModel::getCharacter()
 {
    return m_character;
-}
+};
 
 // public -----------------------------------------------------------------------------
 int PixelModel::Compare(PixelModel pixel) const
@@ -46,4 +46,4 @@ int PixelModel::Compare(PixelModel pixel) const
       return 0;
    }
    return -1;
-}
+};
