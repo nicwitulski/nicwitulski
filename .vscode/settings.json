@@ -1,0 +1,18 @@
+{
+  "projectName": "personal_repo",
+  "editor.formatOnSave": true,
+  "C_Cpp.formatting": "clangFormat",
+  "C_Cpp.clang_format_style": "file:/home/devel/2025R2_ThirdGeneration/_clang-format",
+  "C_Cpp.errorSquiggles": "enabledIfIncludesResolve",
+  "cmake.configureOnOpen": false,
+  "cmake.useCMakePresets": "always",
+  "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+  "search.exclude": {
+    "**/*.o": true,
+    "**/*.d": true,
+    "Debug/": true,
+    "Debug_Distributed/": true,
+    "Release/": true,
+    "Release_Distributed/": true
+  }
+}
