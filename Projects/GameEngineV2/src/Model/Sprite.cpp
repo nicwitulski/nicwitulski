@@ -41,3 +41,5 @@ void Sprite::displaceAndPrint(int16_t dx, int16_t dy) {
     mvprintw(newY, newX, "%c", pixel.getCharacter());
   }
 }
+
+std::vector<Pixel> Sprite::getPixels() { return m_pixels; }

@@ -18,6 +18,7 @@ public:
   void printToCurse();
   void displaceAndPrint(int16_t dx, int16_t dy);
   void eraseFromCurse();
+  std::vector<Pixel> getPixels();
 };
 
 #endif

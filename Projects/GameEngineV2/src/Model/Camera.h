@@ -5,12 +5,16 @@
 
 class Camera {
 private:
-  uint8_t m_viewPortMaxX;
-  uint8_t m_viewPortMaxY;
+  int16_t m_xOffset;
+  int16_t m_yOffset;
+  int16_t m_viewPortMaxX;
+  int16_t m_viewPortMaxY;
 
 public:
   Camera();
-  Camera(uint8_t viewPortMaxX, uint8_t viewPortMaxY);
+  Camera(int16_t xOffset, int16_t yOffset, int16_t viewPortMaxX,
+         int16_t viewPortMaxY);
+  void displaceViewPort(int16_t dx, int16_t dy);
 };
 
 #endif

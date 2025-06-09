@@ -14,5 +14,4 @@ void closeCurseWindow();
 
 void refreshCurse();
 
-void refreshAllEntities(std::vector<Entity *> refreshedEntities,
-                        float deltaTime);
+void refreshAllEntities(float deltaTime);

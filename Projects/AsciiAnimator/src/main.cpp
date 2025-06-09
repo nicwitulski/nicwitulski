@@ -1,8 +1,5 @@
-#include "Controller/Parameters.h"
-#include "Controller/SpriteUtils.h"
-#include "Model/Camera.h"
-#include "Model/Entity.h"
-#include "View/Display.h"
+// #include "GameEngine.h" works, linter doesn't like it though
+#include "../../GameEngineV2/src/GameEngine.h" // This will do for now
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
@@ -14,7 +11,11 @@
 constexpr uint8_t SCREEN_WIDTH = 80;
 constexpr uint8_t SCREEN_HEIGHT = 24;
 constexpr uint8_t FRAME_RATE = 60;
+constexpr uint8_t UI_LAYER = 100;
 using Clock = std::chrono::steady_clock;
+bool m_exitFlag = false;
+
+void setExitFlag() { m_exitFlag = true; }
 
 int main() {
   int userInput = 0;
@@ -30,7 +31,7 @@ int main() {
   std::vector<Animation> testAnimations;
   Animation counterAnimation = loadAnimation("test", "count", true);
   testAnimations.push_back(counterAnimation);
-  auto test = std::make_shared<Entity>("test", testAnimations, true, 1);
+  auto test = std::make_shared<Entity>("test", testAnimations, true, 0);
   allEntities.push_back(test);
 
   int midX = (SCREEN_WIDTH / 2);
@@ -39,6 +40,14 @@ int main() {
 
   Camera gameCamera = Camera(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+  std::vector<Animation> exitAnimations;
+  Animation exitButtonAnimation =
+      loadAnimation("exitButton", "exitButton", true);
+  exitAnimations.push_back(exitButtonAnimation);
+  auto exitEntity =
+      std::make_shared<Entity>("exitButton", exitAnimations, true, UI_LAYER);
+  Button exitButton = Button(0, 0, false, *exitEntity, setExitFlag);
+
   // GameLoop
   initCurse();
   MEVENT event;
@@ -46,7 +55,7 @@ int main() {
   int lastMouseX = -1;
   int lastMouseY = -1;
 
-  while (userInput != '`') {
+  while (userInput != '`' && !m_exitFlag) {
     // --- INPUT HANDLING ---
     int ch;
     while ((ch = getch()) !=
@@ -64,6 +73,12 @@ int main() {
             drawing = false;
             lastMouseX = -1;
             lastMouseY = -1;
+          }
+
+          if (event.bstate & BUTTON1_PRESSED) {
+            if (exitButton.mouseInBounds(event.x, event.y)) {
+              exitButton.executeFunction();
+            }
           }
 
           if (drawing && (event.bstate & REPORT_MOUSE_POSITION)) {
@@ -103,6 +118,7 @@ int main() {
     std::chrono::duration<float> delta = currentTime - lastTime;
     if (delta.count() >= FRAME_DURATION) {
       refreshAllEntities(delta.count());
+      exitButtonAnimation.update(delta.count());
 
       refreshCurse();
 

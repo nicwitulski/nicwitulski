@@ -1,4 +1,5 @@
 #include "Display.h"
+#include "../Controller/Parameters.h"
 #include <algorithm>
 #include <ncurses.h>
 
@@ -25,12 +26,14 @@ void closeCurseWindow() {
 
 void refreshCurse() { refresh(); }
 
-void refreshAllEntities(std::vector<Entity *> refreshedEntities,
-                        float deltaTime) {
-  std::sort(refreshedEntities.begin(), refreshedEntities.end(),
-            [](Entity *a, Entity *b) { return a->getLayer() < b->getLayer(); });
+void refreshAllEntities(float deltaTime) {
+  std::sort(
+      allEntities.begin(), allEntities.end(),
+      [](const std::shared_ptr<Entity> &a, const std::shared_ptr<Entity> &b) {
+        return a->getLayer() < b->getLayer();
+      });
 
-  for (auto &entity : refreshedEntities) {
+  for (const auto &entity : allEntities) {
     entity->refresh(deltaTime);
   }
 }
