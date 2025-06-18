@@ -1,0 +1,50 @@
+6/12/2025
+
+Structure:
+
+GameEngine/src/
+	Core/
+		Engine.h
+		StateManager.h
+		Input.h
+		Base/
+			VisualObject.h
+			Location.h
+			Pixel.h
+			Sprite.h
+			Frame.h
+			Animation.h
+		Objects/
+			Entity.h
+			Tile.h
+			TileMap.h
+			Camera.h
+		UI/
+			UIElement.h
+			Button.h
+			Menu.h
+	Display/
+		Display.h
+	Parameters/
+		Parameters.h
+	Utils/
+		FileLoader.h
+		Logger.h
+		ResourceManager.h
+	Tests/
+		main.cpp
+
+ExampleGame/src/
+	main.cpp
+	States/
+		MainMenu.h
+		Pause.h
+		etc.
+	Assets/
+		Animations/
+			Player/
+				Idle.txt
+				Walk.txt
+				Attack.txt
+	Parameters/
+		Parameters.h
