@@ -1,7 +1,7 @@
 ## Nicholas Witulski's Main Repo
 
 ### Contact info
-[Linked-In](www.linkedin.com/in/nicwitulski)
+Linked-In: www.linkedin.com/in/nicwitulski
 
 Email: nicwitulski@gmail.com
 
